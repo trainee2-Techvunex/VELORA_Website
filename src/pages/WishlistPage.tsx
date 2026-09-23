@@ -47,8 +47,8 @@ export const WishlistPage: React.FC = () => {
   }
 
   return (
-    <div className="bg-[#FAF9F8] min-h-screen py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-8">
+    <div className="bg-[#FAF9F8] min-h-screen py-6 sm:py-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-8">
         <Breadcrumbs
           items={[{ label: 'Home', link: '/' }, { label: 'My Wishlist' }]}
           className="mb-6"
@@ -84,7 +84,7 @@ export const WishlistPage: React.FC = () => {
         </div>
 
         {/* Wishlist Items Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
           {wishlist.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

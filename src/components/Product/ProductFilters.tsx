@@ -39,11 +39,11 @@ const SKIN_TYPES: SkinType[] = [
 ];
 
 const PRICE_TIERS: { label: string; range: [number, number] }[] = [
-  { label: 'All Prices', range: [0, 5000] },
+  { label: 'All Prices', range: [0, 99999] },
   { label: 'Under ₹499', range: [0, 499] },
   { label: '₹500 – ₹999', range: [500, 999] },
   { label: '₹1,000 – ₹1,999', range: [1000, 1999] },
-  { label: 'Above ₹2,000', range: [2000, 5000] },
+  { label: 'Above ₹2,000', range: [2000, 99999] },
 ];
 
 export const ProductFilters: React.FC<ProductFiltersProps> = ({
@@ -61,9 +61,10 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({
     filters.fragranceFamilies.length > 0 ||
     filters.skinTypes.length > 0 ||
     filters.priceRange[0] > 0 ||
-    filters.priceRange[1] < 5000 ||
+    filters.priceRange[1] < 99999 ||
     filters.minRating > 0 ||
     filters.discountOnly;
+
 
   return (
     <div className="space-y-6">

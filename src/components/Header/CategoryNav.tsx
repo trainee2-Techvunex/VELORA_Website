@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MAIN_NAV_ITEMS, NavItem } from '../../data/categories';
+import { MAIN_NAV_ITEMS } from '../../data/categories';
 import { MegaMenu } from './MegaMenu';
-import { ChevronDown, Sparkles } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 
 export const CategoryNav: React.FC = () => {
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
@@ -24,10 +24,17 @@ export const CategoryNav: React.FC = () => {
               <li
                 key={item.id}
                 className="relative"
-                onMouseEnter={() => hasMega && setActiveMenuId(item.id)}
+                onMouseEnter={() => {
+                  if (hasMega) {
+                    setActiveMenuId(item.id);
+                  } else {
+                    setActiveMenuId(null);
+                  }
+                }}
               >
                 <Link
                   to={item.link}
+                  onClick={() => setActiveMenuId(null)}
                   className={`flex items-center gap-1 py-3 px-2.5 text-[11px] font-bold tracking-wider uppercase transition-colors relative ${
                     isHovered
                       ? 'text-[#9F1239]'
@@ -70,3 +77,4 @@ export const CategoryNav: React.FC = () => {
     </nav>
   );
 };
+

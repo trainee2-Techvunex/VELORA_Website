@@ -56,38 +56,33 @@ export const CollectionPage: React.FC = () => {
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
 
   // Initial Filter State
-  const initialFilters: FilterState = {
+  const parseFiltersFromURL = (): FilterState => ({
     categories: category && category !== 'all' ? [category] : [],
     subcategories: searchParams.get('sub') ? [searchParams.get('sub')!] : [],
     concerns: searchParams.get('concern') ? [searchParams.get('concern')!] : [],
     fragranceFamilies: searchParams.get('fragrance') ? [searchParams.get('fragrance')!] : [],
     skinTypes: searchParams.get('skinType') ? [searchParams.get('skinType')!] : [],
     priceRange: [
-      Number(searchParams.get('minPrice')) || 0,
-      Number(searchParams.get('maxPrice')) || 5000,
+      searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : 0,
+      searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : 99999,
     ],
-    minRating: 0,
+
+    minRating: searchParams.get('rating') ? Number(searchParams.get('rating')) : 0,
     inStockOnly: false,
-    discountOnly: false,
+    discountOnly: searchParams.get('discount') === 'true',
     badge: searchParams.get('badge') || undefined,
-    sortBy: 'featured',
-  };
+    sortBy: (searchParams.get('sortBy') as FilterState['sortBy']) || 'featured',
+  });
 
-  const [filters, setFilters] = useState<FilterState>(initialFilters);
 
-  // Sync category route param changes
+  const [filters, setFilters] = useState<FilterState>(parseFiltersFromURL);
+
+  // Sync category route param and search param changes
   useEffect(() => {
-    setFilters((prev) => ({
-      ...prev,
-      categories: category && category !== 'all' ? [category] : [],
-      subcategories: searchParams.get('sub') ? [searchParams.get('sub')!] : [],
-      concerns: searchParams.get('concern') ? [searchParams.get('concern')!] : [],
-      fragranceFamilies: searchParams.get('fragrance') ? [searchParams.get('fragrance')!] : [],
-      skinTypes: searchParams.get('skinType') ? [searchParams.get('skinType')!] : [],
-      badge: searchParams.get('badge') || undefined,
-    }));
+    setFilters(parseFiltersFromURL());
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [category, searchParams]);
+
 
   const searchQuery = searchParams.get('search') || '';
   const recipientQuery = searchParams.get('recipient') || '';
@@ -191,9 +186,17 @@ export const CollectionPage: React.FC = () => {
       }
 
       // 10. Badge filter
-      if (filters.badge && p.badge !== filters.badge) {
-        return false;
+      if (filters.badge) {
+        const b = filters.badge.toUpperCase();
+        if (b.includes('BESTSELLER')) {
+          if (!p.bestSeller && p.badge !== 'BESTSELLER') return false;
+        } else if (b.includes('NEW')) {
+          if (!p.newLaunch && p.badge !== 'NEW LAUNCH') return false;
+        } else if (p.badge !== filters.badge) {
+          return false;
+        }
       }
+
 
       return true;
     }).sort((a, b) => {
@@ -215,13 +218,14 @@ export const CollectionPage: React.FC = () => {
       concerns: [],
       fragranceFamilies: [],
       skinTypes: [],
-      priceRange: [0, 5000],
+      priceRange: [0, 99999],
       minRating: 0,
       inStockOnly: false,
       discountOnly: false,
       sortBy: 'featured',
     });
   };
+
 
   return (
     <div className="bg-[#FAF9F8] min-h-screen">
@@ -247,31 +251,35 @@ export const CollectionPage: React.FC = () => {
       </div>
 
       {/* 2. Main Content & Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-8 py-6 sm:py-8">
         {/* Top Controls Bar */}
-        <div className="flex items-center justify-between gap-4 mb-6 pb-4 border-b border-[#F0E9E6]">
-          {/* Mobile Filter Button */}
-          <button
-            onClick={() => setIsMobileFilterOpen(true)}
-            className="lg:hidden flex items-center gap-2 px-4 py-2 bg-white border border-[#F0E9E6] rounded-xl text-xs font-bold uppercase tracking-wider text-slate-800 shadow-2xs"
-          >
-            <SlidersHorizontal className="w-3.5 h-3.5 text-[#9F1239]" />
-            <span>Filters</span>
-          </button>
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-[#F0E9E6]">
+          <div className="flex items-center gap-3">
+            {/* Mobile Filter Button */}
+            <button
+              onClick={() => setIsMobileFilterOpen(true)}
+              className="lg:hidden flex items-center gap-1.5 px-3.5 py-2 bg-white border border-[#F0E9E6] hover:border-[#9F1239] rounded-xl text-xs font-bold uppercase tracking-wider text-slate-800 shadow-2xs transition-colors shrink-0"
+            >
+              <SlidersHorizontal className="w-3.5 h-3.5 text-[#9F1239]" />
+              <span>Filters</span>
+            </button>
 
-          <span className="text-xs text-slate-500 font-medium">
-            Showing <strong>{filteredProducts.length}</strong> luxurious creations
-          </span>
+            <span className="text-xs text-slate-500 font-medium">
+              Showing <strong className="text-slate-800">{filteredProducts.length}</strong> creations
+            </span>
+          </div>
 
           {/* Sort Dropdown */}
-          <SortDropdown
-            sortBy={filters.sortBy}
-            onSortChange={(val) => setFilters({ ...filters, sortBy: val })}
-          />
+          <div className="ml-auto">
+            <SortDropdown
+              sortBy={filters.sortBy}
+              onSortChange={(val) => setFilters({ ...filters, sortBy: val })}
+            />
+          </div>
         </div>
 
         {/* Layout Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
           {/* Desktop Filter Sidebar */}
           <div className="hidden lg:block lg:col-span-3 bg-white rounded-2xl p-6 border border-[#F0E9E6] shadow-2xs sticky top-24">
             <ProductFilters
@@ -285,7 +293,7 @@ export const CollectionPage: React.FC = () => {
           {/* Product Cards Grid */}
           <div className="lg:col-span-9">
             {filteredProducts.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-6">
                 {filteredProducts.map((product) => (
                   <ProductCard
                     key={product.id}
@@ -295,22 +303,42 @@ export const CollectionPage: React.FC = () => {
                 ))}
               </div>
             ) : (
-              <div className="py-16 text-center bg-white rounded-3xl border border-[#F0E9E6] p-8 space-y-4">
-                <div className="w-16 h-16 rounded-full bg-[#FFF0F3] border border-[#FDE2E8] flex items-center justify-center text-[#9F1239] mx-auto">
-                  <ShoppingBag className="w-8 h-8" />
+              <div className="space-y-6">
+                <div className="py-8 text-center bg-[#FFF8FA] rounded-2xl border border-[#FDE2E8] p-6 space-y-3">
+                  <div className="w-12 h-12 rounded-full bg-white border border-[#FDE2E8] flex items-center justify-center text-[#9F1239] mx-auto shadow-2xs">
+                    <ShoppingBag className="w-6 h-6" />
+                  </div>
+                  <h3 className="font-serif text-lg font-bold text-slate-900">
+                    No exact match for selected filters
+                  </h3>
+                  <p className="text-xs text-slate-500 max-w-md mx-auto">
+                    Showing our most loved luxury formulations below. You can also reset filters to view all products.
+                  </p>
+                  <button
+                    onClick={handleResetFilters}
+                    className="px-5 py-2 bg-[#9F1239] text-white text-xs font-bold uppercase tracking-wider rounded-xl shadow-xs hover:bg-[#801836] transition-colors"
+                  >
+                    Clear All Filters
+                  </button>
                 </div>
-                <h3 className="font-serif text-xl font-bold text-slate-900">
-                  No products matched your filters
-                </h3>
-                <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                  Try clearing some filters or exploring our bestsellers to discover our full range.
-                </p>
-                <button
-                  onClick={handleResetFilters}
-                  className="px-6 py-2.5 bg-[#9F1239] text-white text-xs font-bold uppercase tracking-wider rounded-xl shadow-xs hover:bg-[#801836]"
-                >
-                  Clear All Filters
-                </button>
+
+                <div>
+                  <div className="mb-4">
+                    <h4 className="font-serif text-base font-bold text-slate-900">
+                      Recommended Luxury Bestsellers
+                    </h4>
+                    <p className="text-xs text-slate-500">Popular items you might love</p>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-6">
+                    {PRODUCTS.filter(p => p.bestSeller || p.badge === 'BESTSELLER').slice(0, 6).map((product) => (
+                      <ProductCard
+                        key={product.id}
+                        product={product}
+                        onQuickView={(p) => setQuickViewProduct(p)}
+                      />
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
           </div>

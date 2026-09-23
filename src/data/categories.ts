@@ -202,7 +202,7 @@ export const MAIN_NAV_ITEMS: NavItem[] = [
       promoCard: {
         title: 'Whipped Vanilla Soufflé',
         subtitle: 'Smell like pure Madagascar vanilla all day long',
-        image: 'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=600&q=80',
+        image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80',
         link: '/product/french-vanilla-whipped-body-butter',
         tag: 'BESTSELLER',
       },
@@ -257,7 +257,7 @@ export const HOME_CATEGORY_CAROUSEL = [
   },
   {
     name: 'Invisible Sunscreens',
-    image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=400&q=80',
+    image: 'https://images.unsplash.com/photo-1608068811588-3a67006b7489?auto=format&fit=crop&w=400&q=80',
     link: '/collection/skincare?sub=Sunscreen',
     badge: 'SPF 50+',
   },
@@ -268,12 +268,12 @@ export const HOME_CATEGORY_CAROUSEL = [
   },
   {
     name: 'Whipped Body Lotions',
-    image: 'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=400&q=80',
+    image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=400&q=80',
     link: '/collection/bodycare',
   },
   {
     name: 'Hair Growth Rituals',
-    image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=400&q=80',
+    image: 'https://images.unsplash.com/photo-1608571423539-e951b9b3871e?auto=format&fit=crop&w=400&q=80',
     link: '/collection/haircare',
   },
   {

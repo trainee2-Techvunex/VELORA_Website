@@ -108,7 +108,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       </div>
 
       {/* CONTENT DETAILS */}
-      <div className="p-3.5 sm:p-4 flex flex-col flex-1 justify-between bg-white">
+      <div className="p-3 sm:p-4 flex flex-col flex-1 justify-between bg-white">
         <div className="space-y-1">
           {/* Rating Pill */}
           <div className="h-5 flex items-center mb-1">
@@ -117,30 +117,30 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
           {/* Title - Fixed height so 1-line and 2-line titles reserve identical space */}
           <Link to={`/product/${product.slug}`} className="block group/title">
-            <h3 className="text-xs sm:text-sm font-semibold text-slate-800 leading-snug line-clamp-2 h-9 sm:h-10 group-hover/title:text-[#9F1239] transition-colors">
+            <h3 className="text-xs sm:text-sm font-semibold text-slate-800 leading-snug line-clamp-2 min-h-[2rem] sm:min-h-[2.5rem] group-hover/title:text-[#9F1239] transition-colors">
               {product.name}
             </h3>
           </Link>
 
           {/* Subtitle / Size */}
-          <p className="text-[11px] text-slate-400 line-clamp-1 h-4">
+          <p className="text-[10.5px] sm:text-[11px] text-slate-400 line-clamp-1">
             {product.size} • {product.subcategory}
           </p>
         </div>
 
         {/* Bottom Section: Price & Add to Cart (Strictly Aligned) */}
-        <div className="mt-3 pt-2.5 border-t border-slate-100 space-y-2.5">
-          <div className="flex items-baseline gap-2 flex-wrap h-6">
-            <span className="text-sm sm:text-base font-bold text-slate-900">
+        <div className="mt-3 pt-2 sm:pt-2.5 border-t border-slate-100 flex flex-col justify-end gap-2">
+          <div className="flex items-baseline gap-x-1.5 gap-y-0.5 flex-wrap min-h-[22px]">
+            <span className="text-sm sm:text-base font-bold text-slate-900 leading-none">
               {formatPrice(product.price)}
             </span>
             {product.mrp > product.price && (
-              <span className="text-xs text-slate-400 line-through">
+              <span className="text-[10.5px] sm:text-xs text-slate-400 line-through leading-none">
                 {formatPrice(product.mrp)}
               </span>
             )}
             {product.discount > 0 && (
-              <span className="text-xs font-semibold text-emerald-600">
+              <span className="text-[10px] sm:text-xs font-semibold text-emerald-600 leading-none whitespace-nowrap">
                 ({product.discount}% OFF)
               </span>
             )}
@@ -153,10 +153,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               e.stopPropagation();
               addToCart(product);
             }}
-            className="w-full py-2 sm:py-2.5 bg-[#FFF0F3] hover:bg-[#9F1239] text-[#9F1239] hover:text-white border border-[#FBA6BC] hover:border-[#9F1239] rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-2xs hover:shadow-md flex items-center justify-center gap-1.5 active:scale-98"
+            className="w-full py-2 sm:py-2.5 px-2 bg-[#FFF0F3] hover:bg-[#9F1239] text-[#9F1239] hover:text-white border border-[#FBA6BC] hover:border-[#9F1239] rounded-xl text-[10.5px] sm:text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-2xs hover:shadow-md flex items-center justify-center gap-1.5 active:scale-98 shrink-0"
           >
-            <ShoppingBag className="w-3.5 h-3.5" />
-            <span>Add to Cart</span>
+            <ShoppingBag className="w-3.5 h-3.5 shrink-0" />
+            <span className="truncate">Add to Cart</span>
           </button>
         </div>
       </div>

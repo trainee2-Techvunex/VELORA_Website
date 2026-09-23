@@ -115,7 +115,7 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({
           ref={scrollRef}
           className="flex gap-3 sm:gap-6 overflow-x-auto no-scrollbar pb-4 px-1 scroll-smooth snap-x"
         >
-          {filteredProducts.slice(0, 10).map((product) => (
+          {filteredProducts.slice(0, 24).map((product) => (
             <div
               key={product.id}
               className="w-[230px] sm:w-[270px] lg:w-[290px] shrink-0 snap-start flex flex-col"
